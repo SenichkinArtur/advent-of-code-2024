@@ -3,15 +3,20 @@ use std::fs::read_to_string;
 fn main() {
     let mut left: Vec<String> = Vec::new();
     let mut right: Vec<String> = Vec::new();
-    let mut distance_vector: Vec<i32> = Vec::new();
     let lines_array = read_lines("./input.txt");
 
     for line in lines_array {
-        let line : Vec<_> = line.split(" ").filter(|x| *x != "").collect();
+        let line: Vec<_> = line.split(" ").filter(|x| *x != "").collect();
         left.push(line[0].to_string());
         right.push(line[1].to_string());
     }
 
+    part_one(left.clone(), right.clone());
+    part_two(left.clone(), right.clone());
+}
+
+fn part_one(mut left: Vec<String>, mut right: Vec<String>) {
+    let mut distance_vector: Vec<i32> = Vec::new();
     left.sort();
     right.sort();
 
@@ -22,7 +27,21 @@ fn main() {
     }
 
     let result: i32 = distance_vector.iter().sum();
-    println!("result: {result}");
+    println!("Part 1 result: {result}");
+}
+
+fn part_two(left: Vec<String>, right: Vec<String>) {
+    let mut similarity_array: Vec<i32> = Vec::new();
+
+    for element in left {
+        let duplicates: Vec<&String> = right.iter().filter(|x| **x == element).collect();
+        let duplicate_count = duplicates.len();
+
+        similarity_array.push(element.parse::<i32>().unwrap() * duplicate_count as i32);
+    }
+
+    let result: i32 = similarity_array.iter().sum();
+    println!("Part 2 result: {result}");
 }
 
 fn get_distance(left: String, right: String) -> i32 {
